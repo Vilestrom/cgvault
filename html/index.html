@@ -8,14 +8,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
-  <link rel="stylesheet" type="text/css" href="./css/style-main.css">
+  <link rel="stylesheet" type="text/css" href="../css/style-main.css">
 </head>
 <body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#"><img src = "./images/cgVault.png" id="logo"></a>
+      <a class="navbar-brand" href="#"><img src = "../images/cgVault.png" id="logo"></a>
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -70,6 +70,17 @@
         document.getElementById("cardText").innerHTML = "<div class = 'well'>" + clicked.getElementsByClassName("text")[0].innerHTML + "</div>";
         document.getElementById("cardSets").innerHTML = clicked.getElementsByClassName("sets")[0].innerHTML;
       }
+
+      var data = { card: [
+          {cIMG:"../images/card1.png", cName:"Card 1", cOwn:"1", cText:"Card 1 text", cSet:"Card 1 sets"},
+          {cIMG:"../images/card2.png", cName:"Card 2", cOwn:"2", cText:"Card 2 text", cSet:"Card 2 sets"}
+        ]};
+      var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
+      console.log(template(data));
+      document.write(template(data));
+    </script>
+
+<!--
       var mtg = require('mtgsdk')
       var json = require('JSON')
       var jj= { 'type' : 'elf'}
@@ -84,16 +95,8 @@
     .then(res => res.json())
     .then(data => {
       // 
-    });
+    });-->
 
-      var data = { card: [
-          {cIMG:"./images/card1.png", cName:"Card 1", cOwn:"1", cText:"Card 1 text", cSet:"Card 1 sets"},
-          {cIMG:"./images/card2.png", cName:"Card 2", cOwn:"2", cText:"Card 2 text", cSet:"Card 2 sets"}
-        ]};
-      var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
-      console.log(template(data));
-      document.write(template(data));
-    </script>
     </div>
   </div>
   <div id="cardView">
