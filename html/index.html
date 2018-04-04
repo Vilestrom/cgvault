@@ -65,16 +65,26 @@
     <script id="cardFrames" type="text/x-handlebars-template">
       
       {{#each card}}
-        <div class = 'well col-xs-2 cardFrame' onclick='newCard(this)'>
-	<div class = 'imgURL'><img src="{{imageUrl}}" alt=""></div>
+        <div class = 'well col-xs-2 cardFrame sleeve' onclick='newCard(this)'>
+	<div class = 'imgURL'><img src="{{imageUrl}}" alt="" onerror=this.src="images/cardB.png"></div>
         <p class='name'>{{name}}
         <p class='text'>{{text}}
         <p class='sets'>{{setName}}
+	<div class='well numOwned'>
+	<form class="form-inline">
+	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='decrementButton(this)'>-</button>
+	Owned: <input class="form-control-sm ownedCards" value=0 type="text">
+	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='incrementButton(this)'>+</button>
+	</form>
+	</div>
         </div>
+
       {{/each}}
 
     </script>
     <script>
+
+
       function newCard(clicked)
       {
         document.getElementById("cardIMG").innerHTML = "<div class = 'well sleeve'>" + clicked.getElementsByClassName("imgURL")[0].innerHTML + "</div>";
@@ -89,10 +99,22 @@
         fetch(param)
           .then(res => res.json())
           .then(data => {
-		  console.log("afhjkdshfjkhjkasfhdjkhsfdjkhsjkdah");
 	    console.log(template({card:data}));
 	    document.getElementById("cardDisp").innerHTML = template({card:data});
         });
+      }
+
+      function incrementButton(cardForm)
+      {
+        cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 1 + parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value);
+	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 0)
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;       
+      }
+      function decrementButton(cardForm)
+      {
+        cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) - 1; 
+	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 0)
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;        
       }
 
       var form = document.getElementById("searchbar"); 
@@ -104,12 +126,15 @@
 
       var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
 
+
   fetch("/get?name=jace")
     .then(res => res.json())
     .then(data => {
 	    console.log(data);
 	    document.getElementById("cardDisp").innerHTML = template({card:data});
     });
+
+
 	</script>
     </div>
   </div>

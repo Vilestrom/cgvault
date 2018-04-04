@@ -12,8 +12,6 @@ body {
 }
 
 .well {
-  background-color: transparent;
-  border-color: transparent;
   padding: 0px;
   margin-bottom: 50px;
   margin: 0px;
@@ -40,6 +38,10 @@ body {
 
 .collectBar {
   margin: 0;
+}
+
+.ownedCards {
+  width: 20%;
 }
 
 #cardView {
