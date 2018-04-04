@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+  CG Vault
+  </title>
+  <link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style-main.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#"><img src = "images/cgVault.png" id="logo"></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+    <li class = "dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown">Collections
+      <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="/myCollection.html">My Collection</a></li>
+        <li><a href="#">My Decks</a></li>
+        <li><a href="#">Wishlist</a></li>
+        <li><a href="#">Trade Binder</a></li>
+        <li><a href="/">Find Cards</a></li>
+      </ul>
+    </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#profile">My Profile</a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container" id="collectView">
+
+    
+    <div class="row" id = "cardDisp">
+    </div>
+
+    <script id="cardFrames" type="text/x-handlebars-template">
+      
+        <div class = 'well col-xs-2 cardFrame sleeve' onclick='newCard(this)'>
+	<div class = 'imgURL'><img src="{{imageUrl}}" alt="" onerror=this.src="images/cardB.png"></div>
+        <p class='text'>{{text}}
+        <p class='sets'>{{setName}}
+	<p class='imgurl'>{{imageUrl}}
+	<div class='well numOwned'>
+	<form class="form-inline">
+        <p class='name'>{{name}}<br>
+	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='decrementButton(this)'>-</button>
+	Owned: <input class="form-control-sm ownedCards" value={{owned}} type="text">
+	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='incrementButton(this)'>+</button>
+	</form>
+	</div>
+	<div class='allInfo'>{{id}}</div>
+        </div>
+    </script>
+
+    <script>
+      function newCard(clicked)
+      {
+        document.getElementById("cardIMG").innerHTML = "<div class = 'well sleeve'>" + clicked.getElementsByClassName("imgURL")[0].innerHTML + "</div>";
+        document.getElementById("cardName").innerHTML = "<h2>" + clicked.getElementsByClassName("name")[0].innerHTML + "</h2>"; 
+        document.getElementById("cardText").innerHTML = "<div class = 'well'>" + clicked.getElementsByClassName("text")[0].innerHTML + "</div>";
+        document.getElementById("cardSets").innerHTML = clicked.getElementsByClassName("sets")[0].innerHTML;
+      }
+
+      function buildCollect()
+      {
+	document.getElementById("cardDisp").innerHTML = "";
+	console.log(document.getElementById("cardFrames"));
+	var total = '';
+	for(var i = 0; i < localStorage.length; i++)
+	{
+	  console.log(localStorage[localStorage.key(i)]);
+	  var cur = JSON.parse(localStorage[localStorage.key(i)]);
+	  var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
+	  total += template(cur);
+	}
+	document.getElementById("cardDisp").innerHTML = total;
+      }
+
+      function incrementButton(cardForm)
+      {
+        cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 1 + parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value);
+	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 0)
+	{
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;
+	}
+	else
+	{
+		cardSleeve = cardForm.parentNode.parentNode.parentNode;
+		console.log(cardForm.parentNode.parentNode.parentNode);
+		
+		if(localStorage.getItem(cardSleeve.getElementsByClassName("allInfo")[0].innerHTML) == null)
+		{
+			var card = {
+				"name":cardSleeve.getElementsByClassName("name")[0].innerHTML,
+				"imageUrl":cardSleeve.getElementsByClassName("imgurl")[0].innerHTML.split("\n")[0],
+				"text":cardSleeve.getElementsByClassName("text")[0].innerHTML,
+				"setName":cardSleeve.getElementsByClassName("sets")[0].innerHTML,
+				"id":cardSleeve.getElementsByClassName("allInfo")[0].innerHTML
+			};
+			localStorage.setItem(cardSleeve.getElementsByClassName("allInfo")[0].innerHTML, "Steve");
+			console.log("Test");
+		}
+	}     
+      }
+      function decrementButton(cardForm)
+      {
+        cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) - 1; 
+	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 1)
+	{
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;
+		console.log(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML);
+		
+		if(localStorage.getItem(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML) != null)
+		{
+			localStorage.removeItem(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML);
+			console.log("Test");
+			buildCollect();
+		}     
+	}
+      }
+
+
+      var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
+	buildCollect();
+
+
+	</script>
+
+  </div>
+  <div id="cardView">
+    <div id = "cardIMG"></div>
+    <div id = "cardName"></div>
+    <div id = "cardText"></div>
+    <div id = "cardSets"></div>
+  </div>
+</body>
+</html>
