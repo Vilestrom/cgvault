@@ -1,0 +1,8 @@
+gcloud compute --project "cgvault-200105" ssh --zone "zone" "instance"
+sudo apt-get update
+sudo apt-get mongodb
+// Now in instance
+sudo service mogodb stop
+sudo mkdir $HOME/db
+sudo mongod --dbpath $HOME/db --port 80 --fork --logpath /var/tmp/mongodb
+// Now spun up the mongodb in a child, parent will exit 
