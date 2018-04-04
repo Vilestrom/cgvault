@@ -1,43 +1,18 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script scr="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js.2.0.0/handlebars.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
 	</head>
 
 	<body>
 		<h1>Header Bitch</h1>
 		<p>Paragraph Bitch</p>
-		<select>
-			<option value="volvo" name="name">Volvo</option>
-  			<option value="saab">Saab</option>
-  			<option value="mercedes">Mercedes</option>
-  			<option value="audi">Audi</option>
-		</select>
-		<form action="/html/search.html">
-	Name:<br>
-	<input type = "text" name = "name" value = "something"><br>
-	<input type = "submit" value = "Submit">
+		<form action="/get">
+			Name:<br>
+			<input type = "text" name = "name" value = "something"><br>
+			<input type = "submit" value = "Submit">
 		</form>
-	<script>
-console.log("C");
-	var mtg = require('mtgsdk')
-var cardy = ''
-var name = 'squee'
-
-
-function get(names,cardy) {
-	mtg.card.all({ name: names}).on('data', function getter(card){
-	console.log(card.name)
-	cardy = card.name
-	return  card.name
-})
-setTimeout(function(){console.log(cardy)},1000);
-}
-
-get(name);
-
-	</script>
 	</body>
 </html>
