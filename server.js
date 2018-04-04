@@ -7,17 +7,14 @@ var app = express();
 var mtg = require('mtgsdk');
 var x;
 var jj;
-app.get('/', function(req,res){
+app.use('/images',express.static('images'))
+app.use('/css/',express.static('css'))
 
-	res.sendFile(path.join(__dirname,'html/search.html'));
+app.get('/get', function(req,res) {
+	mtg.card.where(req.query).then(body => {res.send(body)})
 })
-
-app.get('/get', function(req,res){	
-
-	
-	mtg.card.where({name :req.query.name}).then(body => {res.send(body)})
-
-
+app.get('/', function(req,res){
+	res.sendFile(path.join(__dirname,'html/index.html'));
 })
 
 var server = app.listen(30300,function(){

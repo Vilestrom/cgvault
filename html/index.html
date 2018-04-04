@@ -8,14 +8,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
-  <link rel="stylesheet" type="text/css" href="../css/style-main.css">
+  <link rel="stylesheet" type="text/css" href="css/style-main.css">
 </head>
 <body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#"><img src = "../images/cgVault.png" id="logo"></a>
+      <a class="navbar-brand" href="#"><img src = "images/cgVault.png" id="logo"></a>
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -36,9 +36,21 @@
       </ul>
     </li>
     </ul>
-      <ul class="nav navbar-nav navbar-right">
-    <li><a href="#sort">Settings</a></li>
-    <li><a href="#profile">My Profile</a></li>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <form class="form-inline" id="searchbar">
+	  <select class="form-control" id="searchtype">
+		  <option value="name">Card Name</option>
+		  <option value="colors">Colours</option>
+		  <option value="type">Card Type</option>
+		  <option value="text">Card Text</option>
+	  </select>
+	  <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchcontent">
+	  <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick='searchFor(this.parentNode)'>Search</button>
+	</form>
+      </li>
+      <li><a href="#sort">Settings</a></li>
+      <li><a href="#profile">My Profile</a></li>
     </ul>
     </div>
   </div>
@@ -47,40 +59,49 @@
 <div class="container" id="collectView">
 
     
-    <div class="row">
+    <div class="row" id = "cardDisp">
     
     <script id="cardFrames" type="text/x-handlebars-template">
       
       {{#each card}}
         <div class = 'well col-xs-2 cardFrame' onclick='newCard(this)'>
-        <div class = 'cIMG'><img src={{cIMG}} alt={{cName}}></div>
-        <p class='name'>{{cName}}
-        <p class='quant'>Owned: {{cOwn}}
-        <p class='text'>{{cText}}
-        <p class='sets'>{{cSet}}
+	<div class = 'imgURL'><img src="{{imageUrl}}" alt=""></div>
+        <p class='name'>{{name}}
+        <p class='text'>{{text}}
+        <p class='sets'>{{setName}}
         </div>
       {{/each}}
 
     </script>
-    <script> 
+    <script>
       function newCard(clicked)
       {
-        document.getElementById("cardIMG").innerHTML = "<div class = 'well sleeve'>" + clicked.getElementsByClassName("cIMG")[0].innerHTML + "</div>";
+        document.getElementById("cardIMG").innerHTML = "<div class = 'well sleeve'>" + clicked.getElementsByClassName("imgURL")[0].innerHTML + "</div>";
         document.getElementById("cardName").innerHTML = "<h2>" + clicked.getElementsByClassName("name")[0].innerHTML + "</h2>"; 
         document.getElementById("cardText").innerHTML = "<div class = 'well'>" + clicked.getElementsByClassName("text")[0].innerHTML + "</div>";
         document.getElementById("cardSets").innerHTML = clicked.getElementsByClassName("sets")[0].innerHTML;
       }
 
-      var data = { card: [
+      function searchFor(bar)
+      {
+        console.log(document.getElementById("searchtype").value);
+	var param = "/get?" + document.getElementById("searchtype").value + "=" + document.getElementById("searchcontent").value;
+        fetch(param)
+          .then(res => res.json())
+          .then(data => {
+	    console.log(template({card:data}));
+	    document.getElementById("cardDisp").innerHTML = template({card:data});
+    });
+      }
+
+/*      var data = { card: [
           {cIMG:"../images/card1.png", cName:"Card 1", cOwn:"1", cText:"Card 1 text", cSet:"Card 1 sets"},
           {cIMG:"../images/card2.png", cName:"Card 2", cOwn:"2", cText:"Card 2 text", cSet:"Card 2 sets"}
-        ]};
+        ]}; */
       var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
-      console.log(template(data));
+/*      console.log(template(data));
       document.write(template(data));
-    </script>
 
-<!--
       var mtg = require('mtgsdk')
       var json = require('JSON')
       var jj= { 'type' : 'elf'}
@@ -90,13 +111,16 @@
       function get(jj,callback) {
 	    return mtg.card.where(jj).then(body => {callback(body)});
   }
-
+*/
   fetch("/get?name=chandra")
     .then(res => res.json())
     .then(data => {
-      // 
-    });-->
-
+	    console.log(data);
+	    //data.filter( c => { if(c.imageUrl == undefined) { "../images/cardB.png"  } );
+	    // console.log(template({card:data}));
+	    document.getElementById("cardDisp").innerHTML = template({card:data});
+    });
+	</script>
     </div>
   </div>
   <div id="cardView">
