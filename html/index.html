@@ -4,6 +4,7 @@
   <title>
   CG Vault
   </title>
+  <link rel="shortcut icon" href="">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -28,11 +29,11 @@
       <a class="dropdown-toggle" data-toggle="dropdown">Collections
       <span class="caret"></span></a>
       <ul class="dropdown-menu">
-        <li><a href="#">Collections</a></li>
+        <li><a href="./myCollection.html">My Collection</a></li>
         <li><a href="#">My Decks</a></li>
         <li><a href="#">Wishlist</a></li>
         <li><a href="#">Trade Binder</a></li>
-        <li><a href="#">Find Cards</a></li>
+        <li><a href="/">Find Cards</a></li>
       </ul>
     </li>
     </ul>
@@ -46,7 +47,7 @@
 		  <option value="text">Card Text</option>
 	  </select>
 	  <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchcontent">
-	  <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick='searchFor(this.parentNode)'>Search</button>
+	  <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='searchFor()'>Search</button>
 	</form>
       </li>
       <li><a href="#sort">Settings</a></li>
@@ -81,43 +82,32 @@
         document.getElementById("cardText").innerHTML = "<div class = 'well'>" + clicked.getElementsByClassName("text")[0].innerHTML + "</div>";
         document.getElementById("cardSets").innerHTML = clicked.getElementsByClassName("sets")[0].innerHTML;
       }
-
-      function searchFor(bar)
+      function searchFor()
       {
         console.log(document.getElementById("searchtype").value);
 	var param = "/get?" + document.getElementById("searchtype").value + "=" + document.getElementById("searchcontent").value;
         fetch(param)
           .then(res => res.json())
           .then(data => {
+		  console.log("afhjkdshfjkhjkasfhdjkhsfdjkhsjkdah");
 	    console.log(template({card:data}));
 	    document.getElementById("cardDisp").innerHTML = template({card:data});
-    });
+        });
       }
 
-/*      var data = { card: [
-          {cIMG:"../images/card1.png", cName:"Card 1", cOwn:"1", cText:"Card 1 text", cSet:"Card 1 sets"},
-          {cIMG:"../images/card2.png", cName:"Card 2", cOwn:"2", cText:"Card 2 text", cSet:"Card 2 sets"}
-        ]}; */
-      var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
-/*      console.log(template(data));
-      document.write(template(data));
+      var form = document.getElementById("searchbar"); 
+      function handleForm(event) { 
+	      event.preventDefault();
+	      searchFor();
+      } 
+      form.addEventListener('submit', handleForm);
 
-      var mtg = require('mtgsdk')
-      var json = require('JSON')
-      var jj= { 'type' : 'elf'}
-      var x
-      get(jj,body => {x = body
-	    console.log(x)});
-      function get(jj,callback) {
-	    return mtg.card.where(jj).then(body => {callback(body)});
-  }
-*/
-  fetch("/get?name=chandra")
+      var template = Handlebars.compile(document.getElementById("cardFrames").innerHTML);
+
+  fetch("/get?name=jace")
     .then(res => res.json())
     .then(data => {
 	    console.log(data);
-	    //data.filter( c => { if(c.imageUrl == undefined) { "../images/cardB.png"  } );
-	    // console.log(template({card:data}));
 	    document.getElementById("cardDisp").innerHTML = template({card:data});
     });
 	</script>
