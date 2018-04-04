@@ -1,0 +1,31 @@
+{
+  "name": "cgvault",
+  "version": "0.0.1",
+  "description": "A card game collection aplication",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository" : { 
+	  "type" : "git",
+	  "url" : "https://github.com/Vilestrom/cgvault.git"
+  },
+  "author": {
+	  "Kayland Remy",
+	  "Kole Phillips"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "JSON": "^1.0.0",
+    "ajax": "0.0.4",
+    "bootstrap": "^4.0.0",
+    "handlebars": "^4.0.11",
+    "jquery": "^3.3.1",
+    "mongodb": "^3.0.5",
+    "mtgsdk": "^0.3.0",
+    "popper.js": "^1.14.1"
+  },
+  "devDependencies": {
+    "monaco-editor": "^0.11.1"
+  }
+}
