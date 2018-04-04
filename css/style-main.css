@@ -23,9 +23,6 @@ body {
   display: none;
 }
 
-.name {
-  display: none;
-}
 
 .sets {
   display: none;
@@ -40,12 +37,20 @@ body {
   margin: 0;
 }
 
+.imgurl {
+  display: none;
+}
+.allInfo {
+  display: none;
+}
+
 .ownedCards {
   width: 20%;
 }
 
 #cardView {
-  float: right;
+  left: 75%;
+  position: fixed;
   width: 25%;
 }
 

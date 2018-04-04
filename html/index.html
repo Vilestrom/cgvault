@@ -29,7 +29,7 @@
       <a class="dropdown-toggle" data-toggle="dropdown">Collections
       <span class="caret"></span></a>
       <ul class="dropdown-menu">
-        <li><a href="./myCollection.html">My Collection</a></li>
+        <li><a href="/myCollection.html">My Collection</a></li>
         <li><a href="#">My Decks</a></li>
         <li><a href="#">Wishlist</a></li>
         <li><a href="#">Trade Binder</a></li>
@@ -67,16 +67,18 @@
       {{#each card}}
         <div class = 'well col-xs-2 cardFrame sleeve' onclick='newCard(this)'>
 	<div class = 'imgURL'><img src="{{imageUrl}}" alt="" onerror=this.src="images/cardB.png"></div>
-        <p class='name'>{{name}}
         <p class='text'>{{text}}
         <p class='sets'>{{setName}}
+	<p class='imgurl'>{{imageUrl}}
 	<div class='well numOwned'>
 	<form class="form-inline">
+        <p class='name'>{{name}}<br>
 	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='decrementButton(this)'>-</button>
 	Owned: <input class="form-control-sm ownedCards" value=0 type="text">
 	<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick='incrementButton(this)'>+</button>
 	</form>
 	</div>
+	<div class='allInfo'>{{id}}</div>
         </div>
 
       {{/each}}
@@ -108,14 +110,56 @@
       {
         cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 1 + parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value);
 	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 0)
-		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;       
+	{
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;
+	}
+	else
+	{
+		cardSleeve = cardForm.parentNode.parentNode.parentNode;
+		console.log(cardForm.parentNode.parentNode.parentNode);
+		
+			var card = {
+				"name":cardSleeve.getElementsByClassName("name")[0].innerHTML,
+				"imageUrl":cardSleeve.getElementsByClassName("imgurl")[0].innerHTML.split("\n")[0],
+				"text":cardSleeve.getElementsByClassName("text")[0].innerHTML,
+				"setName":cardSleeve.getElementsByClassName("sets")[0].innerHTML,
+				"id":cardSleeve.getElementsByClassName("allInfo")[0].innerHTML,
+				"owned":cardForm.parentNode.getElementsByClassName("ownedCards")[0].value
+			};
+			localStorage.setItem(cardSleeve.getElementsByClassName("allInfo")[0].innerHTML, JSON.stringify(card));
+			console.log(JSON.stringify(card));
+	}     
       }
       function decrementButton(cardForm)
       {
         cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = parseInt(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) - 1; 
-	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 0)
-		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;        
-      }
+	if(isNaN(cardForm.parentNode.getElementsByClassName("ownedCards")[0].value) || cardForm.parentNode.getElementsByClassName("ownedCards")[0].value < 1)
+	{
+		cardForm.parentNode.getElementsByClassName("ownedCards")[0].value = 0;
+		console.log(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML);
+		
+		if(localStorage.getItem(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML) != null)
+		{
+			localStorage.removeItem(cardForm.parentNode.parentNode.parentNode.getElementsByClassName("allInfo")[0].innerHTML);
+		}     
+	}
+	else
+	{
+		cardSleeve = cardForm.parentNode.parentNode.parentNode;
+		console.log(cardForm.parentNode.parentNode.parentNode);
+		
+			var card = {
+				"name":cardSleeve.getElementsByClassName("name")[0].innerHTML,
+				"imageUrl":cardSleeve.getElementsByClassName("imgurl")[0].innerHTML.split("\n")[0],
+				"text":cardSleeve.getElementsByClassName("text")[0].innerHTML,
+				"setName":cardSleeve.getElementsByClassName("sets")[0].innerHTML,
+				"id":cardSleeve.getElementsByClassName("allInfo")[0].innerHTML,
+				"owned":cardForm.parentNode.getElementsByClassName("ownedCards")[0].value
+			};
+			localStorage.setItem(cardSleeve.getElementsByClassName("allInfo")[0].innerHTML, JSON.stringify(card));
+			console.log(JSON.stringify(card));
+	}
+     }
 
       var form = document.getElementById("searchbar"); 
       function handleForm(event) { 
