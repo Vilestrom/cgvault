@@ -1,5 +1,4 @@
 var mtg = require('mtgsdk')
-var json = require('JSON')
 var jj= { 'type' : 'elf'}
 var x
 get(jj,body => {x = body
